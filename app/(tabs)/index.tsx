@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList, Image, ActivityIndicator } from "react-native";
 import axios from "axios";
 
-const API_KEY = ""; // API key aqui
+const apiKey = process.env.EXPO_PUBLIC_API_KEY;
+// $ echo "EXPO_PUBLIC_API_KEY=<place your spoonacular api key here>" > .env
 
 const CATEGORIES = {
   desayuno: "breakfast",
@@ -12,7 +13,7 @@ const CATEGORIES = {
 const fetchRecipes = async (category) => {
   try {
     const response = await axios.get(
-      `https://api.spoonacular.com/recipes/complexSearch?query=${category}&number=10&apiKey=${API_KEY}`
+      `https://api.spoonacular.com/recipes/complexSearch?query=${category}&number=10&apiKey=${apiKey}`
     );
     return response.data.results;
   } catch (error) {
