@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity, RefreshControl, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+  RefreshControl,
+  ScrollView,
+} from "react-native";
 import axios from "axios";
 import { useRouter } from "expo-router";
 
@@ -10,7 +20,7 @@ const CATEGORIES = {
   desayuno: "breakfast",
   comida: "lunch,dinner",
   postres: "dessert",
-  bebidas: "drink,beverage"
+  bebidas: "drink,beverage",
 };
 
 const fetchRecipes = async (category) => {
@@ -46,13 +56,20 @@ export default function TabOneScreen() {
     loadRecipes();
   }, []);
 
-  if (loading) return <ActivityIndicator size="large" color="#FF6347" style={styles.loader} />;
+  if (loading)
+    return (
+      <ActivityIndicator size="large" color="#FF6347" style={styles.loader} />
+    );
 
   return (
     <ScrollView
       style={styles.container}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={loadRecipes} colors={["#FF6347"]} />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={loadRecipes}
+          colors={["#FF6347"]}
+        />
       }
     >
       {Object.entries(recipes).map(([key, items]) => (
@@ -67,7 +84,8 @@ export default function TabOneScreen() {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.card}
-                onPress={() => router.push(`/recipe/${item.id}`)}>
+                onPress={() => router.push(`/recipe/${item.id}`)}
+              >
                 <Image source={{ uri: item.image }} style={styles.image} />
                 <Text style={styles.recipeTitle}>{item.title}</Text>
               </TouchableOpacity>
@@ -83,7 +101,13 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 10, backgroundColor: "#fff" },
   section: { marginBottom: 20 },
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 10, color: "#FF6347", textTransform: "capitalize" },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#FF6347",
+    textTransform: "capitalize",
+  },
   card: { marginRight: 15, alignItems: "center", width: 150 },
   image: { width: 150, height: 100, borderRadius: 10 },
   recipeTitle: { fontSize: 14, textAlign: "center", marginTop: 5 },
