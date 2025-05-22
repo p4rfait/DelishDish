@@ -45,7 +45,6 @@ export default function RecipeDetail() {
     <ScrollView style={styles.container}>
       <Image source={{ uri: recipe.image }} style={styles.image} />
       <Text style={styles.sectionTitle}>Summary:</Text>
-      <Text>{recipe.id}</Text>
       <Text>{recipe.summary.replace(/<\/?[^>]+(>|$)/g, "")}</Text>
 
       <Text style={styles.sectionTitle}>Ingredients:</Text>
