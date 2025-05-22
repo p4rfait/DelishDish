@@ -87,7 +87,9 @@ export default function TabOneScreen() {
                 onPress={() => router.push(`/recipe/${item.id}`)}
               >
                 <Image source={{ uri: item.image }} style={styles.image} />
-                <Text style={styles.recipeTitle}>{item.title}</Text>
+                <Text style={styles.recipeTitle} numberOfLines={2} ellipsizeMode="tail">
+                  {item.title}
+                </Text>
               </TouchableOpacity>
             )}
             showsHorizontalScrollIndicator={false}
