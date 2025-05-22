@@ -148,7 +148,7 @@ export default function TabOneScreen() {
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Ingrese su API Key de Spoonacular</Text>
+            <Text style={styles.modalTitle}>Enter your Spoonacular API Key</Text>
             <TextInput
               placeholder="API Key"
               style={styles.input}
@@ -158,10 +158,10 @@ export default function TabOneScreen() {
               autoCorrect={false}
             />
             <Button
-              title="Guardar y Continuar"
+              title="Save and Continue"
               onPress={() => {
                 if (inputKey.trim() === "") {
-                  Alert.alert("Error", "La API Key no puede estar vacía.");
+                  Alert.alert("Error", "The API Key cannot be empty.");
                   return;
                 }
                 loadRecipes(inputKey.trim());
