@@ -13,7 +13,7 @@ const CATEGORIES = {
 const fetchRecipes = async (category) => {
   try {
     const response = await axios.get(
-      `https://api.spoonacular.com/recipes/complexSearch?query=${category}&number=10&apiKey=${apiKey}`
+      `https://api.spoonacular.com/recipes/complexSearch?query=${category}&sort=random&number=5&apiKey=${apiKey}`
     );
     return response.data.results;
   } catch (error) {
