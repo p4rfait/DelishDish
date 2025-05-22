@@ -4,6 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native";
+import * as Speech from 'expo-speech';
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_KEY;
@@ -52,6 +53,47 @@ export default function RecipeDetail() {
     }
   };
 
+  const [speaking, setSpeaking] = useState(false);
+
+  const readRecipeInfo = async () => {
+    const isSpeaking = await Speech.isSpeakingAsync();
+
+    if (isSpeaking) {
+      Speech.stop();
+      setSpeaking(false);
+      return;
+    }
+
+    if (!recipe) return;
+
+    let text = `${recipe.title}. ${recipe.summary?.replace(/<[^>]*>/g, '')}.`;
+
+    if (recipe.extendedIngredients?.length) {
+      text += ' Ingredients: ';
+      text += recipe.extendedIngredients.map(ing => ing.original).join('. ') + '.';
+    }
+
+    if (recipe.instructions) {
+      text += ' Instructions: ' + recipe.instructions.replace(/<[^>]*>/g, '') + '.';
+    }
+
+    if (recipe.analyzedInstructions?.[0]?.steps?.length) {
+      text += ' Steps: ';
+      recipe.analyzedInstructions[0].steps.forEach(step => {
+        text += `Step ${step.number}: ${step.step}. `;
+      });
+    }
+
+    setSpeaking(true);
+    Speech.speak(text, {
+      language: 'en-US',
+      rate: 1.0,
+      onDone: () => setSpeaking(false),
+      onStopped: () => setSpeaking(false),
+    });
+  };
+
+
   if (loading) {
     return <ActivityIndicator size="large" color="#FF6347" style={styles.loader} />;
   }
@@ -67,7 +109,12 @@ export default function RecipeDetail() {
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: recipe.image }} style={styles.image} />
-      <Button title="Add/Remove from Favorites" onPress={toggleFavorite} color="#FF6347" />
+      <Button title="Add/Remove from Favorites 🤍" onPress={toggleFavorite} color="#FF6347" />
+      <Button
+        title={speaking ? 'Stop Reading' : '🔊 Read Recipe'}
+        onPress={readRecipeInfo}
+        color="#FF6347"
+      />
       <Text style={styles.sectionTitle}>Summary:</Text>
       <Text>{recipe.summary.replace(/<\/?[^>]+(>|$)/g, "")}</Text>
 
