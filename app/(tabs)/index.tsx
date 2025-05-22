@@ -17,10 +17,10 @@ const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 // $ echo "EXPO_PUBLIC_API_KEY=<place your spoonacular api key here>" > .env
 
 const CATEGORIES = {
-  desayuno: "breakfast",
-  comida: "lunch,dinner",
-  postres: "dessert",
-  bebidas: "drink,beverage",
+  Breakfast: "breakfast",
+  "Lunch & Dinner": "lunch,dinner",
+  Desser: "dessert",
+  "Drinks & Beverages": "drink,beverage",
 };
 
 const fetchRecipes = async (category) => {
