@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, ScrollView, ActivityIndicator, StyleSheet } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "react-native";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_KEY;
@@ -29,6 +31,27 @@ export default function RecipeDetail() {
     fetchRecipeDetail();
   }, [id]);
 
+  const toggleFavorite = async () => {
+    try {
+      const stored = await AsyncStorage.getItem("favorites");
+      const favorites = stored ? JSON.parse(stored) : [];
+
+      const exists = favorites.find((fav) => fav.id === recipe.id);
+
+      let updated;
+      if (exists) {
+        updated = favorites.filter((fav) => fav.id !== recipe.id);
+      } else {
+        updated = [...favorites, { id: recipe.id, title: recipe.title, image: recipe.image }];
+      }
+
+      await AsyncStorage.setItem("favorites", JSON.stringify(updated));
+      alert(exists ? "Removed from Favorites" : "Added to Favorites");
+    } catch (e) {
+      console.error("Error toggling favorite", e);
+    }
+  };
+
   if (loading) {
     return <ActivityIndicator size="large" color="#FF6347" style={styles.loader} />;
   }
@@ -44,6 +67,7 @@ export default function RecipeDetail() {
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: recipe.image }} style={styles.image} />
+      <Button title="Add/Remove from Favorites" onPress={toggleFavorite} color="#FF6347" />
       <Text style={styles.sectionTitle}>Summary:</Text>
       <Text>{recipe.summary.replace(/<\/?[^>]+(>|$)/g, "")}</Text>
 
