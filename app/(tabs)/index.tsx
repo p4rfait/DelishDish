@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity, RefreshControl, ScrollView } from "react-native";
 import axios from "axios";
 import { useRouter } from "expo-router";
 
@@ -9,6 +9,8 @@ const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 const CATEGORIES = {
   desayuno: "breakfast",
   comida: "lunch,dinner",
+  postres: "dessert",
+  bebidas: "drink,beverage"
 };
 
 const fetchRecipes = async (category) => {
@@ -26,25 +28,38 @@ const fetchRecipes = async (category) => {
 export default function TabOneScreen() {
   const [recipes, setRecipes] = useState({ desayuno: [], comida: [] });
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
 
+  const loadRecipes = async () => {
+    setLoading(true);
+    const newRecipes = {};
+    for (const [label, query] of Object.entries(CATEGORIES)) {
+      const items = await fetchRecipes(query);
+      newRecipes[label] = items;
+    }
+    setRecipes(newRecipes);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const loadRecipes = async () => {
-      const desayuno = await fetchRecipes(CATEGORIES.desayuno);
-      const comida = await fetchRecipes(CATEGORIES.comida);
-      setRecipes({ desayuno, comida });
-      setLoading(false);
-    };
     loadRecipes();
   }, []);
 
   if (loading) return <ActivityIndicator size="large" color="#FF6347" style={styles.loader} />;
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={loadRecipes} colors={["#FF6347"]} />
+      }
+    >
       {Object.entries(recipes).map(([key, items]) => (
         <View key={key} style={styles.section}>
-          <Text style={styles.title}>{key === "comida" ? "ALMUERZOS / CENAS" : key.toUpperCase()}</Text>
+          <Text style={styles.title}>
+            {key === "comida" ? "ALMUERZOS / CENAS" : key.toUpperCase()}
+          </Text>
           <FlatList
             data={items}
             horizontal
@@ -52,8 +67,7 @@ export default function TabOneScreen() {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.card}
-                onPress={() => router.push(`/recipe/${item.id}`)}
-              >
+                onPress={() => router.push(`/recipe/${item.id}`)}>
                 <Image source={{ uri: item.image }} style={styles.image} />
                 <Text style={styles.recipeTitle}>{item.title}</Text>
               </TouchableOpacity>
@@ -62,7 +76,7 @@ export default function TabOneScreen() {
           />
         </View>
       ))}
-    </View>
+    </ScrollView>
   );
 }
 
