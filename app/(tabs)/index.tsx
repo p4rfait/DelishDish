@@ -19,7 +19,7 @@ const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 const CATEGORIES = {
   Breakfast: "breakfast",
   "Lunch & Dinner": "lunch,dinner",
-  Desser: "dessert",
+  Dessert: "dessert",
   "Drinks & Beverages": "drink,beverage",
 };
 
