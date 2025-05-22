@@ -36,7 +36,7 @@ const fetchRecipes = async (category) => {
 };
 
 export default function TabOneScreen() {
-  const [recipes, setRecipes] = useState({ desayuno: [], comida: [] });
+  const [recipes, setRecipes] = useState({});
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
