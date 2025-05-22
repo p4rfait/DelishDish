@@ -2,7 +2,10 @@
 
 <p align="center">Tu compañero perfecto para descubrir recetas deliciosas al instante. 🔍👨‍🍳</p>
 
----
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d3e41fa0-0bd5-4e0a-afd7-5bce032ae2cd" alt="pantalla" width="300" />
+</p>
+
 
 ## 👨‍💻 Integrantes del Proyecto
 
@@ -11,8 +14,6 @@
 - **Aslly Eduvina Hernandez Melara** - `HM240071`
 
 ---
-
-![2025-05-2201-56-47-ezgif com-optimize](https://github.com/user-attachments/assets/642220a4-cdb9-4339-88aa-736b69d34f56)
 
 ## 🚀 Instrucciones para Probar la Aplicación
 
