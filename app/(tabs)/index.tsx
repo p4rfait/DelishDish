@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, Image, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity } from "react-native";
 import axios from "axios";
+import { useRouter } from "expo-router";
 
 const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 // $ echo "EXPO_PUBLIC_API_KEY=<place your spoonacular api key here>" > .env
@@ -25,6 +26,7 @@ const fetchRecipes = async (category) => {
 export default function TabOneScreen() {
   const [recipes, setRecipes] = useState({ desayuno: [], comida: [] });
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const loadRecipes = async () => {
@@ -46,12 +48,15 @@ export default function TabOneScreen() {
           <FlatList
             data={items}
             horizontal
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => `${key}-${item.id}`}
             renderItem={({ item }) => (
-              <View style={styles.card}>
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => router.push(`/recipe/${item.id}`)}
+              >
                 <Image source={{ uri: item.image }} style={styles.image} />
                 <Text style={styles.recipeTitle}>{item.title}</Text>
-              </View>
+              </TouchableOpacity>
             )}
             showsHorizontalScrollIndicator={false}
           />
